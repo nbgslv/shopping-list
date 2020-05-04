@@ -34,8 +34,11 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-const Lists = ({ lists, loading = false, error = false, history }) =>
-  !loading && !error ? (
+const Lists = ({ lists, loading, error, getListsRequest, history }) => {
+  React.useEffect(() => {
+    if (!lists.length) getListsRequest();
+  }, [lists, getListsRequest]);
+  return !loading && !error.length ? (
     <>
       {history && <SubHeader title="Your Lists" />}
       <ListWrapper>
@@ -50,17 +53,14 @@ const Lists = ({ lists, loading = false, error = false, history }) =>
   ) : (
     <Alert>{loading ? 'Loading...' : error}</Alert>
   );
+};
 
 Lists.propTypes = {
   lists: PropTypes.arrayOf(PropTypes.object).isRequired,
-  loading: PropTypes.bool,
-  error: PropTypes.bool,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string.isRequired,
+  getListsRequest: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
-};
-
-Lists.defaultProps = {
-  loading: false,
-  error: false,
 };
 
 export default Lists;
