@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Route, Switch } from 'react-router-dom';
+import ListsContextProvider, { ListsContext } from '../Context/ListsContextProvider';
 import Header from '../components/Header/Header';
 import Lists from './Lists';
 import List from './List';
@@ -27,11 +28,21 @@ const App = () => (
     <GlobalStyle />
     <AppWrapper>
       <Header />
-      <Switch>
-        <Route exact path='/' component={Lists} />
-        <Route path='/list/:id/new' component={Form} />
-        <Route path='/list/:id' component={List} />
-      </Switch>
+      <ListsContextProvider>
+        <ListsContext.Consumer>
+          {({ lists }) => (
+            <Switch>
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+              <Route exact path="/" render={props => lists && <Lists lists={lists} {...props} />} />
+              <Route path="/list/:id/new" component={Form} />
+              <Route
+                path="/list/:id"
+                render={props => lists && <List lists={lists} {...props} />}
+              />
+            </Switch>
+          )}
+        </ListsContext.Consumer>
+      </ListsContextProvider>
     </AppWrapper>
   </>
 );
