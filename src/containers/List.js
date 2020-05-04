@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import styled from 'styled-components';
-import withDataFetching from '../withDataFetching';
 import SubHeader from '../components/Header/SubHeader';
 import ListItem from '../components/ListItem/ListItem';
 
@@ -18,8 +17,9 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-const List = ({ data, loading, error, lists, match, history }) => {
-  const items = data && data.filter(item => item.listId === parseInt(match.params.id, 10));
+const List = ({ lists, listItems, loading = false, error = false, match, history }) => {
+  const items =
+    listItems && listItems.filter(item => item.listId === parseInt(match.params.id, 10));
   // eslint-disable-next-line no-shadow
   const list = lists && lists.find(list => list.id === parseInt(match.params.id, 10));
 
@@ -42,14 +42,17 @@ const List = ({ data, loading, error, lists, match, history }) => {
 };
 
 List.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.string.isRequired,
   lists: PropTypes.arrayOf(PropTypes.object).isRequired,
+  listItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool,
+  error: PropTypes.bool,
   match: ReactRouterPropTypes.match.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
 };
 
-export default withDataFetching({
-  dataSource: 'https://my-json-server.typicode.com/pranayfpackt/-React-Projects/items',
-})(List);
+List.defaultProps = {
+  loading: false,
+  error: false,
+};
+
+export default List;
