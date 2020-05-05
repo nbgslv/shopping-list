@@ -17,13 +17,14 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-const List = ({ lists, listItems, loading = false, error = false, match, history }) => {
-  const items =
-    listItems && listItems.filter(item => item.listId === parseInt(match.params.id, 10));
+const List = ({ items, loading, error, lists, getItemsRequest, match, history }) => {
   // eslint-disable-next-line no-shadow
   const list = lists && lists.find(list => list.id === parseInt(match.params.id, 10));
 
-  return !loading && !error ? (
+  React.useEffect(() => {
+    if (!(items.length > 0)) getItemsRequest(match.params.id);
+  }, [items, match.params.id, getItemsRequest]);
+  return !loading && !error.length ? (
     <>
       {history && list && (
         <SubHeader
@@ -43,16 +44,12 @@ const List = ({ lists, listItems, loading = false, error = false, match, history
 
 List.propTypes = {
   lists: PropTypes.arrayOf(PropTypes.object).isRequired,
-  listItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  loading: PropTypes.bool,
-  error: PropTypes.bool,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string.isRequired,
+  getItemsRequest: PropTypes.func.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
-};
-
-List.defaultProps = {
-  loading: false,
-  error: false,
 };
 
 export default List;

@@ -34,9 +34,8 @@ const App = () => (
           <ListsContext.Consumer>
             {({ lists, loading: listsLoading, error: listsError, getListsRequest }) => (
               <ItemsContext.Consumer>
-                {({ items }) => (
+                {({ items, loading: itemsLoading, error: itemsError, getItemsRequest }) => (
                   <Switch>
-                    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     <Route
                       exact
                       path="/"
@@ -57,7 +56,18 @@ const App = () => (
                     <Route
                       path="/list/:id"
                       render={props =>
-                        lists && items && <List lists={lists} items={items} {...props} />
+                        lists &&
+                        items && (
+                          <List
+                            lists={lists}
+                            items={items}
+                            loading={itemsLoading}
+                            error={itemsError}
+                            getItemsRequest={getItemsRequest}
+                            /* eslint-disable-next-line react/jsx-props-no-spreading */
+                            {...props}
+                          />
+                        )
                       }
                     />
                   </Switch>
