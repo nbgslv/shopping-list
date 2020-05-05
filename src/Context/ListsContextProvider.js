@@ -21,6 +21,20 @@ const reducer = (value, action) => {
       return {
         ...value,
         lists: [],
+        list: {},
+        loading: false,
+        error: action.payload,
+      };
+    case 'GET_LIST_SUCCESS':
+      return {
+        ...value,
+        list: action.payload,
+        loading: false,
+      };
+    case 'GET_LIST_ERROR':
+      return {
+        ...value,
+        list: {},
         loading: false,
         error: action.payload,
       };
@@ -52,10 +66,23 @@ const ListsContextProvider = ({ children }) => {
     else dispatch({ type: 'GET_LISTS_ERROR', payload: result.error });
   };
 
+  const getListRequest = async id => {
+    const result = await fetchData(
+      `https://my-json-server.typicode.com/PacktPublishing/React-Projects/lists/${id}`
+    );
+
+    if (result.data && Object.prototype.hasOwnProperty.call(result.data, 'id'))
+      dispatch({ type: 'GET_LIST_SUCCESS', payload: result.data });
+    else dispatch({ type: 'GET_LIST_ERROR', payload: result.error });
+  };
+
   return (
-    <ListsContext.Provider value={{ ...value, getListsRequest }}>{children}</ListsContext.Provider>
+    <ListsContext.Provider value={{ ...value, getListsRequest, getListRequest }}>
+      {children}
+    </ListsContext.Provider>
   );
 };
+
 
 ListsContextProvider.propTypes = {
   children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,

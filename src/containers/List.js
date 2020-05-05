@@ -17,13 +17,14 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-const List = ({ items, loading, error, lists, getItemsRequest, match, history }) => {
-  // eslint-disable-next-line no-shadow
-  const list = lists && lists.find(list => list.id === parseInt(match.params.id, 10));
-
+const List = ({ items, loading, error, list, getListRequest, getItemsRequest, match, history }) => {
   React.useEffect(() => {
+    if (!Object.prototype.hasOwnProperty.call(list, 'id') || list.id !== match.params.id) {
+      getListRequest(match.params.id);
+    }
+
     if (!(items.length > 0)) getItemsRequest(match.params.id);
-  }, [items, match.params.id, getItemsRequest]);
+  }, [items, list, match.params.id, getListRequest, getItemsRequest]);
   return !loading && !error.length ? (
     <>
       {history && list && (
@@ -43,13 +44,21 @@ const List = ({ items, loading, error, lists, getItemsRequest, match, history })
 };
 
 List.propTypes = {
-  lists: PropTypes.arrayOf(PropTypes.object).isRequired,
+  list: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string.isRequired,
+  }),
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string.isRequired,
+  getListRequest: PropTypes.func.isRequired,
   getItemsRequest: PropTypes.func.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
+};
+
+List.defaultProps = {
+  list: {},
 };
 
 export default List;

@@ -29,6 +29,7 @@ const reducer = (value, action) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
 async function fetchData(dataSource) {
   try {
     const data = await fetch(dataSource);
@@ -43,7 +44,7 @@ async function fetchData(dataSource) {
 const ItemsContextProvider = ({ children }) => {
   const [value, dispatch] = React.useReducer(reducer, initialValue);
 
-  const getItemsRequest = async (id) => {
+  const getItemsRequest = async id => {
     const result = await fetchData(
       `https://my-json-server.typicode.com/PacktPublishing/React-Projects/items/${id}/items`
     );

@@ -32,7 +32,14 @@ const App = () => (
       <ListsContextProvider>
         <ItemsContextProvider>
           <ListsContext.Consumer>
-            {({ lists, loading: listsLoading, error: listsError, getListsRequest }) => (
+            {({
+              list,
+              lists,
+              loading: listsLoading,
+              error: listsError,
+              getListsRequest,
+              getListRequest,
+            }) => (
               <ItemsContext.Consumer>
                 {({ items, loading: itemsLoading, error: itemsError, getItemsRequest }) => (
                   <Switch>
@@ -59,10 +66,11 @@ const App = () => (
                         lists &&
                         items && (
                           <List
-                            lists={lists}
+                            list={list}
                             items={items}
                             loading={itemsLoading}
                             error={itemsError}
+                            getListRequest={getListRequest}
                             getItemsRequest={getItemsRequest}
                             /* eslint-disable-next-line react/jsx-props-no-spreading */
                             {...props}
