@@ -32,21 +32,50 @@ const App = () => (
       <ListsContextProvider>
         <ItemsContextProvider>
           <ListsContext.Consumer>
-            {({ lists }) => (
+            {({
+              list,
+              lists,
+              loading: listsLoading,
+              error: listsError,
+              getListsRequest,
+              getListRequest,
+            }) => (
               <ItemsContext.Consumer>
-                {({ items }) => (
+                {({ items, loading: itemsLoading, error: itemsError, getItemsRequest }) => (
                   <Switch>
-                    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     <Route
                       exact
                       path="/"
-                      render={props => lists && <Lists lists={lists} {...props} />}
+                      render={props =>
+                        lists && (
+                          <Lists
+                            lists={lists}
+                            loading={listsLoading}
+                            error={listsError}
+                            getListsRequest={getListsRequest}
+                            /* eslint-disable-next-line react/jsx-props-no-spreading */
+                            {...props}
+                          />
+                        )
+                      }
                     />
                     <Route path="/list/:id/new" component={Form} />
                     <Route
                       path="/list/:id"
                       render={props =>
-                        lists && items && <List lists={lists} items={items} {...props} />
+                        lists &&
+                        items && (
+                          <List
+                            list={list}
+                            items={items}
+                            loading={itemsLoading}
+                            error={itemsError}
+                            getListRequest={getListRequest}
+                            getItemsRequest={getItemsRequest}
+                            /* eslint-disable-next-line react/jsx-props-no-spreading */
+                            {...props}
+                          />
+                        )
                       }
                     />
                   </Switch>
