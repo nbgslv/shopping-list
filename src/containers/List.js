@@ -19,9 +19,11 @@ const Alert = styled.span`
 
 const List = ({ items, loading, error, list, getListRequest, getItemsRequest, match, history }) => {
   React.useEffect(() => {
-    if (!Object.prototype.hasOwnProperty.call(list, 'id') || list.id !== match.params.id) {
+    if (
+      !Object.prototype.hasOwnProperty.call(list, 'id') ||
+      list.id !== parseInt(match.params.id, 10)
+    )
       getListRequest(match.params.id);
-    }
 
     if (!(items.length > 0)) getItemsRequest(match.params.id);
   }, [items, list, match.params.id, getListRequest, getItemsRequest]);
