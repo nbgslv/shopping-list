@@ -41,7 +41,13 @@ const App = () => (
               getListRequest,
             }) => (
               <ItemsContext.Consumer>
-                {({ items, loading: itemsLoading, error: itemsError, getItemsRequest }) => (
+                {({
+                  items,
+                  loading: itemsLoading,
+                  error: itemsError,
+                  getItemsRequest,
+                  addItemRequest,
+                }) => (
                   <Switch>
                     <Route
                       exact
@@ -59,7 +65,10 @@ const App = () => (
                         )
                       }
                     />
-                    <Route path="/list/:id/new" component={Form} />
+                    <Route
+                      path="/list/:id/new"
+                      render={props => <Form addItemRequest={addItemRequest} {...props} />}
+                    />
                     <Route
                       path="/list/:id"
                       render={props =>
