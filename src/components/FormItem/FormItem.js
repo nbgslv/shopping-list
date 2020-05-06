@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import styled from 'styled-components';
 
 const FormItemWrapper = styled.div`
@@ -39,6 +41,7 @@ const FormItem = ({
       id={id}
       placeholder={placeholder}
       value={value}
+      onChange={e => handleOnChange(e.target.value)}
     />
   </FormItemWrapper>
 );
