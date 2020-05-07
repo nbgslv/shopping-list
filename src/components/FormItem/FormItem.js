@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const FormItemWrapper = styled.div`
@@ -23,14 +24,7 @@ const Input = styled.input`
   border: 1px solid lightGrey;
 `;
 
-const FormItem = ({
-  id,
-  label,
-  type = 'text',
-  placeholder = '',
-  value,
-  handleOnChange,
-}) => (
+const FormItem = ({ id, label, type = 'text', placeholder = '', value, handleOnChange }) => (
   <FormItemWrapper>
     <Label htmlFor={id}>{label}</Label>
     <Input
@@ -39,8 +33,24 @@ const FormItem = ({
       id={id}
       placeholder={placeholder}
       value={value}
+      onChange={e => handleOnChange(e.target.value)}
     />
   </FormItemWrapper>
 );
+
+FormItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  handleOnChange: PropTypes.func.isRequired,
+};
+
+FormItem.defaultProps = {
+  type: 'text',
+  placeholder: '',
+  value: '',
+};
 
 export default FormItem;

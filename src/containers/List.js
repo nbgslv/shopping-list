@@ -22,9 +22,11 @@ const List = ({ match, history }) => {
   const { list, getListRequest } = React.useContext(ListsContext);
   const { loading, error, items, getItemsRequest } = React.useContext(ItemsContext);
   React.useEffect(() => {
-    if (!Object.prototype.hasOwnProperty.call(list, 'id') || list.id !== match.params.id) {
+    if (
+      !Object.prototype.hasOwnProperty.call(list, 'id') ||
+      list.id !== parseInt(match.params.id, 10)
+    )
       getListRequest(match.params.id);
-    }
 
     if (!(items.length > 0)) getItemsRequest(match.params.id);
   }, [items, list, match.params.id, getListRequest, getItemsRequest]);
