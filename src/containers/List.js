@@ -1,6 +1,8 @@
 import React from 'react';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import styled from 'styled-components';
-import withDataFetching from '../withDataFetching';
+import { ListsContext } from '../Context/ListsContextProvider';
+import { ItemsContext } from '../Context/ItemsContextProvider';
 import SubHeader from '../components/Header/SubHeader';
 import ListItem from '../components/ListItem/ListItem';
 
@@ -16,15 +18,24 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-const List = ({ data, loading, error, match, history }) => {
-  const items =
-    data && data.filter(item => item.listId === parseInt(match.params.id));
+const List = ({ match, history }) => {
+  const { list = {}, getListRequest } = React.useContext(ListsContext);
+  const { loading, error, items, getItemsRequest } = React.useContext(ItemsContext);
+  React.useEffect(() => {
+    if (
+      !Object.prototype.hasOwnProperty.call(list, 'id') ||
+      list.id !== parseInt(match.params.id, 10)
+    )
+      getListRequest(match.params.id);
 
-  return !loading && !error ? (
+    if (!(items.length > 0)) getItemsRequest(match.params.id);
+  }, [items, list, match.params.id, getListRequest, getItemsRequest]);
+  return !loading && !error.length ? (
     <>
-      {history && (
+      {history && list && (
         <SubHeader
           goBack={() => history.goBack()}
+          title={list.title}
           openForm={() => history.push(`${match.url}/new`)}
         />
       )}
@@ -37,7 +48,9 @@ const List = ({ data, loading, error, match, history }) => {
   );
 };
 
-export default withDataFetching({
-  dataSource:
-    'https://my-json-server.typicode.com/pranayfpackt/-React-Projects/items',
-})(List);
+List.propTypes = {
+  match: ReactRouterPropTypes.match.isRequired,
+  history: ReactRouterPropTypes.history.isRequired,
+};
+
+export default List;

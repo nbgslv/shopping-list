@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Route, Switch } from 'react-router-dom';
+import GlobalContext from '../Context/GolabalContext';
 import Header from '../components/Header/Header';
 import Lists from './Lists';
 import List from './List';
@@ -27,11 +28,13 @@ const App = () => (
     <GlobalStyle />
     <AppWrapper>
       <Header />
-      <Switch>
-        <Route exact path='/' component={Lists} />
-        <Route path='/list/:id/new' component={Form} />
-        <Route path='/list/:id' component={List} />
-      </Switch>
+      <GlobalContext>
+        <Switch>
+          <Route exact path="/" component={Lists} />
+          <Route path="/list/:id/new" component={Form} />
+          <Route path="/list/:id" component={List} />
+        </Switch>
+      </GlobalContext>
     </AppWrapper>
   </>
 );
