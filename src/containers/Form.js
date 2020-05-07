@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ItemsContext } from '../Context/ItemsContextProvider';
 import SubHeader from '../components/Header/SubHeader';
 import FormItem from '../components/FormItem/FormItem';
 import Button from '../components/Button/Button';
@@ -16,25 +17,28 @@ const SubmitButton = styled(Button)`
   margin: 2% 0;
 `;
 
-const Form = ({ match, history }) => (
-  <>
-    {history && (
-      <SubHeader goBack={() => history.goBack()} title={`Add Item`} />
-    )}
-    <FormWrapper>
-      <form>
-        <FormItem id='title' label='Title' placeholder='Insert title' />
-        <FormItem
-          id='quantity'
-          label='Quantity'
-          type='number'
-          placeholder='0'
-        />
-        <FormItem id='price' label='Price' type='number' placeholder='0.00' />
-        <SubmitButton>Add Item</SubmitButton>
-      </form>
-    </FormWrapper>
-  </>
-);
+const Form = ({ match, history }) => {
+  const { addItemRequest } = React.useContext(ItemsContext);
+  return (
+    <>
+      {history && (
+        <SubHeader goBack={() => history.goBack()} title={`Add Item`}/>
+      )}
+      <FormWrapper>
+        <form>
+          <FormItem id='title' label='Title' placeholder='Insert title'/>
+          <FormItem
+            id='quantity'
+            label='Quantity'
+            type='number'
+            placeholder='0'
+          />
+          <FormItem id='price' label='Price' type='number' placeholder='0.00'/>
+          <SubmitButton>Add Item</SubmitButton>
+        </form>
+      </FormWrapper>
+    </>
+  );
+}
 
 export default Form;
