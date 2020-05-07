@@ -23,8 +23,9 @@ const List = ({ match, history }) => {
   const { loading, error, items, getItemsRequest } = React.useContext(ItemsContext);
   React.useEffect(() => {
     if (
-      !Object.prototype.hasOwnProperty.call(list, 'id') ||
-      list.id !== parseInt(match.params.id, 10)
+      list !== undefined &&
+      (!Object.prototype.hasOwnProperty.call(list, 'id') ||
+        list.id !== parseInt(match.params.id, 10))
     )
       getListRequest(match.params.id);
 
