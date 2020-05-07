@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { ListsContext } from '../Context/ListsContextProvider';
 import SubHeader from '../components/Header/SubHeader';
 
 const ListWrapper = styled.div`
@@ -34,7 +34,8 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-const Lists = ({ lists, loading, error, getListsRequest, history }) => {
+const Lists = ({ history }) => {
+  const { lists, loading, error, getListsRequest } = React.useContext(ListsContext);
   React.useEffect(() => {
     if (!lists.length) getListsRequest();
   }, [lists, getListsRequest]);
@@ -56,10 +57,6 @@ const Lists = ({ lists, loading, error, getListsRequest, history }) => {
 };
 
 Lists.propTypes = {
-  lists: PropTypes.arrayOf(PropTypes.object).isRequired,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.string.isRequired,
-  getListsRequest: PropTypes.func.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
 };
 

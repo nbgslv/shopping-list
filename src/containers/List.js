@@ -1,7 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import styled from 'styled-components';
+import { ListsContext } from '../Context/ListsContextProvider';
+import { ItemsContext } from '../Context/ItemsContextProvider';
 import SubHeader from '../components/Header/SubHeader';
 import ListItem from '../components/ListItem/ListItem';
 
@@ -17,7 +18,9 @@ const Alert = styled.span`
   text-align: center;
 `;
 
-const List = ({ items, loading, error, list, getListRequest, getItemsRequest, match, history }) => {
+const List = ({ match, history }) => {
+  const { list, getListRequest } = React.useContext(ListsContext);
+  const { loading, error, items, getItemsRequest } = React.useContext(ItemsContext);
   React.useEffect(() => {
     if (
       !Object.prototype.hasOwnProperty.call(list, 'id') ||
@@ -46,21 +49,8 @@ const List = ({ items, loading, error, list, getListRequest, getItemsRequest, ma
 };
 
 List.propTypes = {
-  list: PropTypes.shape({
-    id: PropTypes.number,
-    title: PropTypes.string.isRequired,
-  }),
-  items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.string.isRequired,
-  getListRequest: PropTypes.func.isRequired,
-  getItemsRequest: PropTypes.func.isRequired,
   match: ReactRouterPropTypes.match.isRequired,
   history: ReactRouterPropTypes.history.isRequired,
-};
-
-List.defaultProps = {
-  list: {},
 };
 
 export default List;
